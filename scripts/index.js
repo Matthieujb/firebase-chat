@@ -1,8 +1,14 @@
+
+import config from './config.js';
 import { dispatchRoute } from './functions.js';
 
 import Sign from '../controllers/Sign.js';
 
 import Chat from '../controllers/chat.js';
+
+
+
+firebase.initializeApp(config);
 
 const router  = new Router({
     mode: 'hash'

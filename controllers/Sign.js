@@ -24,7 +24,7 @@ export default class Sign {
         const password = document.getElementById('login_password').value;
 
         firebase.auth().signInWithEmailAndPassword(email, password)
-            .then(userCredentials => firebase.firestore().collection('users').doc(userCredentials.user.uid).get())
+            .then(userCredentials => firebase.firestore().collection('user').doc(userCredentials.user.uid).get())
             .then(userDoc => {
                 userDoc = userDoc.data();
                 console.log('Connected', userDoc);

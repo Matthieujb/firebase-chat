@@ -1,9 +1,10 @@
 export default {
-    apiKey: "AIzaSyD4htcJdJIMvXYFlCpakGJhhg9qu-O1D9o",
-    authDomain: "fir-webchat-28eeb.firebaseapp.com",
-    databaseURL: "https://fir-webchat-28eeb.firebaseio.com",
-    projectId: "fir-webchat-28eeb",
-    storageBucket: "fir-webchat-28eeb.appspot.com",
-    messagingSenderId: "1019550119466"
+    apiKey: "AIzaSyAtzgJjTqLptht3IvmxRsasDz7BkNZeHog",
+    authDomain: "fir-chat-9a2f3.firebaseapp.com",
+    databaseURL: "https://fir-chat-9a2f3.firebaseio.com",
+    projectId: "fir-chat-9a2f3",
+    storageBucket: "fir-chat-9a2f3.appspot.com",
+    messagingSenderId: "408452034644"
+
 
 }

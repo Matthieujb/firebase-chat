@@ -6,4 +6,4 @@ export default {
     storageBucket: "fir-webchat-28eeb.appspot.com",
     messagingSenderId: "1019550119466"
 
-};
+}

@@ -1,82 +1,86 @@
+import store from '../scripts/store.js';
+
 export default class Sign {
-    
+
     constructor(router) {
-        this.router = router ;
         this.view = 'sign.html';
+        this.router = router;
     }
 
     init() {
         console.log('HOME !');
 
-
         document.getElementById('login').addEventListener('submit', this.onSubmitLogin.bind(this), false);
-
-        document.getElementById('signin').addEventListener('submit', this.onSignin.bind(this), false);
-
-        document.getElementById('google').addEventListener('click', this.onGoogle.bind(this), false);
-
-
-        document.getElementById('twitter').addEventListener('click', this.onTwitter.bind(this), false);
-
-        document.getElementById('github').addEventListener('click', this.onGithub.bind(this), false);
+        document.getElementById('signin').addEventListener('submit', this.onSignInLogin.bind(this), false);
+        document.getElementById('github').addEventListener('click', this.onSubmitLogin.bind(this), false);
+        document.getElementById('google').addEventListener('click', this.onSignInGoogle.bind(this), false);
     }
 
-        onSubmitLogin(event){
+    onSubmitLogin(event) {
 
-            event.preventDefault();
+        event.preventDefault(); //évite que le navigateur de recharger la page
 
-            console.log('Connexion !');
+        const email = document.getElementById('login_email').value;
+        const password = document.getElementById('login_password').value;
+
+        firebase.auth().signInWithEmailAndPassword(email, password)
+            .then(userCredentials => firebase.firestore().collection('users').doc(userCredentials.user.uid).get())
+            .then(userDoc => {
+                userDoc = userDoc.data();
+                console.log('Connected', userDoc);
+
+                store.setState({ user: userDoc });
+                this.router.navigateTo('/chat');
+            })
+            .catch(error => this.displayError(error.code + '\n' + error.message));
+
+        console.log('Connexion !')
     }
 
-    onSignin(event){
+    onSignInLogin(event) {
 
-        event.preventDefault();
+
+        event.preventDefault(); //évite que le navigateur de recharger la page
+
         const firstname = document.getElementById('signin_firstname').value;
         const lastname = document.getElementById('signin_lastname').value;
         const email = document.getElementById('signin_email').value;
         const password = document.getElementById('signin_password').value;
-        const password_confirm = document.getElementById('signin_password_confirm');const avatar = document.getElementById('signin_avatar').files[0];
+        const password_confirm = document.getElementById('signin_password_confirm').value;
+        const avatar = document.getElementById('signin_avatar').files[0];
 
-        console.log(firstname, lastname, email, password, password_confirm, avatar /* ... */);
+        console.log("Bonjour ", firstname, lastname, email, password, password_confirm, avatar);
+
         if (password !== password_confirm) {
-            
-            return this.displayError('les mot de pass ne correspond pas.');
 
+            return this.displayError('Les mots de passes ne correspondent pas !')
+        }
 
-}     
-    // tentative creation de compte 
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then((userCredentials) => firebase.firestore().collection('users').doc(userCredentials.user.uid).set({ firstname, lastname, email }))
+            .then(() => this.router.navigateTo('/chat'))
+            .catch(error => {
+                this.displayError(error.code + '\n' + error.message);
+            });
+    }
+    onSignInGoogle(event) {
 
-    firebase.auth().creatUserWithEmailAndPassword(email, password)
+        event.preventDefault(); //évite que le navigateur de recharger la page
 
-    .then((userCredentials) => firebase.firestore().collection('users').doc(userCredentials.users.uid).set({firstname,lastname , email}))
-    .catch(error => {
-        this.displayError(error.code + '\n' + error.message);
-    })
-  
-}
+        console.log('Connexion !')
+    }
+    onSignInGithub(event) {
 
-    onGoogle(event){
+        event.preventDefault(); //évite que le navigateur de recharger la page
 
-        event.preventDefault();
-        console.log('google !');
-
+        console.log('Connexion !');
     }
 
-    onTwitter(event){
-
-        event.preventDefault();
-        console.log('twitter !')
-    }
-
-    onGithub(event){
-
-        event.preventDefault();
-        console.log('github !')
-    }
-
-    displayError(errorMessage){
+    displayError(errorMessage) {
         let error = document.getElementById('error');
         error.classList.remove('d-none');
         error.textContent = errorMessage;
     }
+
 }
+

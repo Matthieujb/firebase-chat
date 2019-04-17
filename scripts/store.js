@@ -1,5 +1,5 @@
 let _state = {
-    users : null
+    user : null
 };
 
 export default {
